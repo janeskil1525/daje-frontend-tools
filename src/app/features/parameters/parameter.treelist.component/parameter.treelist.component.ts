@@ -43,8 +43,7 @@ export class ParameterTreelistComponent {
 
   nodeSelect(event:any) {
 
-    this.router.navigate(['/parameter-value']);
-
+    this.router.navigate(['main',{ outlets: { middle_split: ['parameter-value', event.node.data.tools_parameters_pkey,  this.ParamTreeListService.getTools_projects_pkey()] } } ]);
     /*let type = this.getType(event.node);
     if ( type.length < 17 && type.indexOf("tools_parameter") > -1 ) {        
         this.loadValueGUIService.sendClickEvent(

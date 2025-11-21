@@ -4,16 +4,28 @@ import { ParameterValuesComponent } from "./features/parameters/parameter.values
 
 export const routes: Routes = [
 
+
     {
-        path:'parameter-value',
-        component: ParameterValuesComponent,
-        outlet:'middlesplit',
-        title:'Parameter value',
-    },
-    {
-        path: '',
+        path: 'main',
         component: MainComponent,
         title: 'Main',
-        pathMatch: 'full'
+        children:[
+            {
+                path:'parameter-value/:tools_parameters_pkey/:tools_projects_pkey',
+                component: ParameterValuesComponent,
+                outlet: 'middle_split',
+            },
+            {
+                path:'parameter-value',
+                component: ParameterValuesComponent,
+                outlet: 'middle_split',
+            },
+
+        ]
     },
+    {
+        path:'',
+        redirectTo:'/main',
+        pathMatch: 'full'
+    }
 ];

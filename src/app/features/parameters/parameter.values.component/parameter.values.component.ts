@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DatabaseService } from '../../../core/database/database.service';
 import { CommonModule } from '@angular/common';
@@ -14,7 +14,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { WorkflowService } from '../../../core/workflow/workflow.service';
 
 @Component({
-  selector: 'p-parameter-values-component',
+  selector: 'app-parameter-values-component',
   imports: [
     CommonModule,
     InputTextModule,
@@ -31,9 +31,13 @@ import { WorkflowService } from '../../../core/workflow/workflow.service';
 
 export class ParameterValuesComponent {
   loadGUISub!:Subscription;
-  isVisible:boolean = false;
+  isVisible:boolean = true;
   payload:ParameterValuesInterface = this.initialInterface();
 
+  tools_parameters_pkey = input.required<number>();
+  tools_projects_pkey = input.required<number>();
+
+  test =1;
   constructor(
       private dbservice: DatabaseService, 
       private loadGUIService: ParameterValuesLoadService,
@@ -41,30 +45,22 @@ export class ParameterValuesComponent {
   ){}
 
   ngOnInit() {
-        this.loadGUISub = this.loadGUIService.getClickEvent().subscribe(()=>{
-            this.showWin(
-              this.loadGUIService.getTools_projects_pkey(),
-              this.loadGUIService.getTools_parameters_pkey()
-          );
-      });
+    this.showWin(this.tools_projects_pkey, this.tools_parameters_pkey);
+
   }
 
   showWin(tools_projects_pkey:number, tools_parameters_pkey:number) {
-     this.winVisible(this.loadGUIService.getVisibility());
-     if(this.isVisible){
-        this.dbservice.setKey2(tools_parameters_pkey)
-        this.dbservice.load_record('ParameterValue', tools_projects_pkey).subscribe((response) => {        
-            this.payload = (
-              this.dbservice.process_response(
-                response, 
-                this.initialInterface(),
-              {}) as unknown) as ParameterValuesInterface;
-            if(this.payload.active) this.payload.active = true;          
-        });
-    } else {
-      this.dbservice.setKey2(0);
-      this.payload = this.initialInterface();
-    }
+
+      this.dbservice.setKey2(tools_parameters_pkey)
+      this.dbservice.load_record('ParameterValue', tools_projects_pkey).subscribe((response) => {
+          this.payload = (
+            this.dbservice.process_response(
+              response,
+              this.initialInterface(),
+            {}) as unknown) as ParameterValuesInterface;
+          if(this.payload.active) this.payload.active = true;
+      });
+
   }
 
   saveTableObject() {

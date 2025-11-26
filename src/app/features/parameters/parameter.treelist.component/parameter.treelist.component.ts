@@ -38,32 +38,25 @@ export class ParameterTreelistComponent {
       });
   }
 
-  ngOnInit() {
-    /*this.paramTreelist = this.ParamTreeListService.getClickEvent().subscribe(()=>{
-        this.dbservice.load_all_records('ParamTreelist').subscribe(response => {
-          this.paramnodes = ((this.dbservice.process_response(response,[]) as unknown) as any)
-        });
-    });*/
-  }
-
   nodeSelect(event:any) {
 
-      let tools_parameters_pkey = event.node.data.tools_parameters_pkey
-      let tools_projects_pkey = this.tools_projects_pkey;
-    this.router.navigate(
-        ['main',
-            {
-                outlets: {
-                    middle_split:
-                        ['parameter-value',
-                            tools_parameters_pkey,
-                            tools_projects_pkey
-                        ]
-                }
-            }
-        ]
-    );
-
+      if (this.getType(event.node) === "tools_parameters") {
+          let tools_parameters_pkey = event.node.data.tools_parameters_pkey
+          let tools_projects_pkey = this.tools_projects_pkey;
+          this.router.navigate(
+              ['main',
+                  {
+                      outlets: {
+                          middle_split:
+                              ['parameter-value',
+                                  tools_parameters_pkey,
+                                  tools_projects_pkey
+                              ]
+                      }
+                  }
+              ]
+          );
+      }
   }
 
   getType(node: any) {

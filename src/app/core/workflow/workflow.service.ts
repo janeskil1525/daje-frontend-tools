@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpRequest, HttpHandler, HttpEvent, HttpParams } from '@angular/common/http';
-import { LocalStorageService } from '../localstorage/local-storage.service';
+import { HttpClient } from '@angular/common/http';
 import { ResponseService } from '../response/response.service';
 import { WorkflowPayloadInterface,  WorkflowInterface, WorkflowIdentificationData} from './workflow.interface';
 import { environment } from '../../../environments/environment';
+import {UserLoginService} from "../../features/user/login/user.login.service";
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class WorkflowService {
     private connector_data: WorkflowIdentificationData = {connector:"", connector_pkey:0, workflow_pkey:0};
 
     constructor(
-      private  localstorage: LocalStorageService,
+      private login_service: UserLoginService,
       private responseservice: ResponseService 
     ) {}  
 
@@ -23,14 +23,14 @@ export class WorkflowService {
     
      execute(data: any) {
         let url = environment.apiUrl;
-        this.localkey = this.localstorage.getItem('X-Token-Check')!;
+        this.localkey = this.login_service.getXTokenCheck();
         return this.http.put(url + `workflow/api/execute`, 
            data, { headers:{
           'X-Token-Check': this.localkey
         }});
       }
 
-      setConnectorData(connector: string, connector_pkey:number, workflow_fkey:number) {
+      setConnectorData(connector: string, connector_pkey:number, workflow_fkey:number = 0) {
         this.connector_data.connector = connector;
         this.connector_data.connector_pkey = connector_pkey;
         this.connector_data.workflow_pkey = workflow_fkey;
@@ -66,6 +66,5 @@ export class WorkflowService {
     
             return 1;
         }
-      
 }
 

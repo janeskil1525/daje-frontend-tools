@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { FloatLabel } from 'primeng/floatlabel';
@@ -13,6 +13,7 @@ import { TableObjectDatatypeInterface } from './table-object-datatype.interface'
 import { ResponseService } from '../../../core/response/response.service';
 import { WorkflowService } from '../../../core/workflow/workflow.service';
 import { DatabaseService } from '../../../core/database/database.service';
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'p-table-object-component',
@@ -31,13 +32,13 @@ import { DatabaseService } from '../../../core/database/database.service';
 })
 
 export class TableObjectComponent {
-  payload:TableObjectInterface = this.initialInterface();
-  clickEventsubscription!:Subscription;
-  isVisible: boolean = false;
-  isLengthVisible: boolean = true;
-  isScaleVisible: boolean = true;
-  tools_objects_tables_datatypes_pkey: number = 0;
-  datatypes: TableObjectDatatypeInterface[] = [];
+    payload = {} as TableObjectInterface;
+    private activatedRoute = inject(ActivatedRoute);
+    isVisible: boolean = false;
+    isLengthVisible: boolean = true;
+    isScaleVisible: boolean = true;
+    tools_objects_tables_datatypes_pkey: number = 0;
+    datatypes: TableObjectDatatypeInterface[] = [];
 
   constructor(
     private tableObjecteGUI:TableObjectGUIService,
@@ -51,15 +52,15 @@ export class TableObjectComponent {
       this.datatypes = (this.dbservice.process_response(response, this.initialInterface()) as unknown) as TableObjectDatatypeInterface[];        
     });*/
 
-    this.clickEventsubscription = this.tableObjecteGUI.getClickEvent().subscribe((tools_object_tables_pkey) => {
+   /* this.clickEventsubscription = this.tableObjecteGUI.getClickEvent().subscribe((tools_object_tables_pkey) => {
         this.showWin(tools_object_tables_pkey);
-      })
+      })*/
     };
     
    showWin(tools_object_tables_pkey:any) {
-    this.winVisible(this.tableObjecteGUI.getVisibility());
+
     if(tools_object_tables_pkey === 0 && this.isVisible) {
-      this.initializeNew();      
+
     } else if (tools_object_tables_pkey > 0 && this.isVisible) {
       // Load table object
       /*this.dbservice.load_record('TableObject', tools_object_tables_pkey).subscribe((response) => {
@@ -79,10 +80,7 @@ export class TableObjectComponent {
   }
 
   winVisible(isVisible:boolean) {
-     this.isVisible = isVisible;
-     if (isVisible === false) {
-      this.payload = this.initialInterface();
-     }
+
   }
   
   saveTableObject(tools_objects_tables_datatypes_pkey:number) {
@@ -96,7 +94,7 @@ export class TableObjectComponent {
   }
 
   setupGUI(tools_objects_tables_datatypes_pkey: number) {
-    let result = this.datatypes.find(
+   /* let result = this.datatypes.find(
       datatype => datatype.tools_objects_tables_datatypes_pkey === tools_objects_tables_datatypes_pkey
     );
     if (result !== undefined){
@@ -112,23 +110,6 @@ export class TableObjectComponent {
         this.isScaleVisible = false;
         this.payload.scale = 0;
       }
-    }
-  }
-
-  initializeNew() {
-      this.payload = this.initialInterface();
-      let node = this.tableObjecteGUI.getObjectData();
-      this.payload.tools_objects_fkey = node.data.tools_objects_pkey;
-      this.payload.tools_version_fkey = node.data.tools_version_fkey;
-  }
-
-  initialInterface() {
-    return {
-      tools_object_tables_pkey:0, tools_version_fkey:0, 
-      tools_objects_fkey:0, fieldname: "",
-      tools_objects_tables_datatypes_fkey:0, length:0,
-      scale:0, active:false, visible:false,
-      editnum:1, insby:"", insdatetime:"", modby:"", moddatetime:""
-    };
+    }*/
   }
 }

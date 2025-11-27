@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
 import { MainComponent } from "./features/main/main.component/main.component";
 import { ParameterValuesComponent } from "./features/parameters/parameter.values.component/parameter.values.component";
-//import {parameterValuesResolver} from "./features/parameters/parameter.values.component/parameter.values.resolver";
-import {objectTreeListResolver} from "./features/objects/object.tree.list.component/object.tree.list-resolver";
 import {TabsTreelistsComponent} from "./features/menu/tabs.treelists.component/tabs.treelists.component";
-import {parameterValuesResolver} from "./features/parameters/parameter.values.component/parameter.values-resolver";
+import {TableObjectComponent} from "./features/objects/table-object/table-object.component";
+import {ObjectComponent} from "./features/objects/object.component/object.component";
+
 
 
 export const routes: Routes = [
@@ -24,8 +24,12 @@ export const routes: Routes = [
                 path:'parameter-value/:tools_parameters_pkey/:tools_projects_pkey',
                 component: ParameterValuesComponent,
                 outlet: 'middle_split',
-
             },
+            {
+                path:'object/:tools_objects_pkey',
+                component: ObjectComponent,
+                outlet: 'middle_split',
+            }
         ]
     },
     {

@@ -1,6 +1,6 @@
 import { WorkflowPayloadInterface,  WorkflowInterface, WorkflowIdentificationData} from './workflow.interface';
-import { WorkflowService } from '../../core/workflow/workflow.service';
-import { ResponseService } from '../../core/response/response.service'
+import { WorkflowService } from './workflow.service';
+import { ResponseService } from '../response/response.service'
 
 export class WorkflowPayload {
 

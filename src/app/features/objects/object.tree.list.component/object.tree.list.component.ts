@@ -4,7 +4,7 @@ import { TreeModule } from 'primeng/tree';
 import { MenuItem, PrimeIcons } from 'primeng/api';
 import { ContextMenu } from 'primeng/contextmenu';
 import { TreelistLoadService } from '../../../core/treelist/treelist.load.service';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { BadgeModule } from 'primeng/badge';
 import { VersionsGuiService } from '../../versions/versions.component/versions.gui.service';
 import { DatabaseService } from '../../../core/database/database.service';
@@ -20,19 +20,15 @@ import {ObjectTreeListInterface} from "./object.tree.list.interface";
 
 export class ObjectTreelistComponent{
     selectedNode: string = "";
-
     items: MenuItem[] = [];
-
     @ViewChild('cm') cm!: ContextMenu;
     selectedId!: string;
     nodes:ObjectTreeListInterface[] = [];
-    //tools_projects_pkey = signal('');
     private activatedRoute = inject(ActivatedRoute);
+    private router = inject(Router);
 
    constructor(
     private database: DatabaseService,
-    private loadTreeListService: TreelistLoadService,
-    private versionsGUI: VersionsGuiService,
   ) {
        this.activatedRoute.params.subscribe((params) => {
            this.database.load_record('Treelist', params['tools_projects_pkey']).subscribe((response: ObjectTreeListInterface[]) => {
@@ -51,6 +47,7 @@ export class ObjectTreelistComponent{
 
   nodeSelect(event:any) {
     let type = this.getType(event.node);
+    let data = event.node.data;
     if ( type.indexOf("tools_objects") > -1 ) {
       /*this.items = [
           {label:'Table', icon: PrimeIcons.PLUS, command: (event) => this.addObject(this.selectedNode, 1)}, 
@@ -61,7 +58,16 @@ export class ObjectTreelistComponent{
     if (type === "tools_version") {
 
     } else if ( type === "tools_objects1") {
-
+        this.router.navigate(
+            ['main',
+                {
+                    outlets: {
+                        middle_split:
+                            ['object', data.tools_objects_pkey]
+                    }
+                }
+            ]
+        );
     } else if ( type === "tools_objects2") {
 
     } else if ( type === 'tools_object_tables') {

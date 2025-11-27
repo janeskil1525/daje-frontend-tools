@@ -1,7 +1,5 @@
 import {inject, Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {LocalStorageService} from '../localstorage/local-storage.service';
-import {ResponseInterface} from '../response/response.interface';
 import {HttpClient} from '@angular/common/http';
 import {EndPoint} from './endpoints';
 import {UserLoginService} from "../../features/user/login/user.login.service";
@@ -17,7 +15,6 @@ export class DatabaseService {
   private key2:number = -1;
 
   constructor(
-    private localstorage: LocalStorageService,
     private login_service: UserLoginService,
   ) {}
 

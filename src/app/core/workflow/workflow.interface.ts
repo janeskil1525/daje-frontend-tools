@@ -8,10 +8,10 @@ export interface WorkflowInterface {
     workflow: string,
     activity: string,
     connector_data: WorkflowIdentificationData,
-};
+}
 
 export interface WorkflowPayloadInterface {
     workflow: WorkflowInterface,
     payload: any
-};
+}
 

@@ -1,37 +1,36 @@
 
-@if (isVisible) {
-    <div class="mb-4 p-8 flex items-center justify-center">
-        <p-card [style]="{ width: '25rem', overflow: 'hidden' }">          
-            <div class="flex gap-4 mt-1 p-3">
-                <p-floatlabel variant="on" >
-                    <input pInputText id="tablename" [(ngModel)]="payload.name" autocomplete="off" />
-                    <label for="tablename">Name</label>
-                </p-floatlabel>
+
+<div class="mb-4 p-8 flex items-center justify-center">
+    <p-card [style]="{ width: '25rem', overflow: 'hidden' }">
+        <div class="flex gap-4 mt-1 p-3">
+            <p-floatlabel variant="on" >
+                <input pInputText id="tablename" [(ngModel)]="payload.name" autocomplete="off" />
+                <label for="tablename">Name</label>
+            </p-floatlabel>
+        </div>
+        <div class="flex gap-4 mt-1 p-3">
+            <p-select
+                [options]="objecttypes"
+                [(ngModel)]="tools_object_types_pkey"
+                [ngModelOptions]="{standalone: true}"
+                placeholder="Select an object type"
+                class="w-full md:w-56"
+                optionLabel="type_name"
+                animate.enter="enter-animation"
+                optionValue="tools_object_types_pkey"
+                [checkmark]="true"
+                (onChange)="setupGUI(tools_object_types_pkey)"
+            />
+        </div>
+        <div class="flex gap-4 mt-1 p-3">
+            <p-checkbox inputId="active" name="active" value="true" [(ngModel)]="payload.active" [binary]="true"/>
+            <label for="active" class="ml-2"> Active </label>
+        </div>
+        <ng-template #footer>
+            <div class="flex gap-4 mt-1">
+                <p-button (click)="cleanPayload()" label="Cancel" severity="secondary" class="w-full" [outlined]="true" styleClass="w-full" />
+                <p-button (click)="saveObject()"  label="Save" class="w-full" styleClass="w-full" />
             </div>
-            <div class="flex gap-4 mt-1 p-3">
-                <p-select 
-                    [options]="objecttypes" 
-                    [(ngModel)]="tools_object_types_pkey" 
-                    [ngModelOptions]="{standalone: true}"
-                    placeholder="Select an object type" 
-                    class="w-full md:w-56" 
-                    optionLabel="name"
-                    animate.enter="enter-animation"
-                    optionValue="tools_object_types_pkey"
-                    [checkmark]="true"
-                    (onChange)="setupGUI(tools_object_types_pkey)"
-                />
-            </div>
-            <div class="flex gap-4 mt-1 p-3">
-                <p-checkbox inputId="active" name="active" value="true" [(ngModel)]="payload.active" [binary]="true"/>
-                <label for="active" class="ml-2"> Active </label>                  
-            </div>
-            <ng-template #footer>
-                <div class="flex gap-4 mt-1">
-                    <p-button (click)="hideWin()" label="Cancel" severity="secondary" class="w-full" [outlined]="true" styleClass="w-full" />
-                    <p-button (click)="saveObject()"  label="Save" class="w-full" styleClass="w-full" />
-                </div>
-            </ng-template>
-        </p-card>
-    </div>
-}
+        </ng-template>
+    </p-card>
+</div>

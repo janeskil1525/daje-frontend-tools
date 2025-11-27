@@ -1,6 +1,5 @@
 import {Component, inject, input} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ParameterValuesLoadService } from './parameter.values.load.service';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { FloatLabel } from 'primeng/floatlabel';

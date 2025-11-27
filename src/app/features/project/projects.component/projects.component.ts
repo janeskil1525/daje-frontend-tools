@@ -4,6 +4,7 @@ import { SelectModule } from 'primeng/select';
 import { ProjectsInterface } from './projects.interface';
 import { Router } from '@angular/router';
 import { DatabaseService } from "../../../core/database/database.service";
+import {WorkflowService} from "../../../core/workflow/workflow.service";
 
 @Component({
   selector: 'app-select-projects',
@@ -19,7 +20,9 @@ export class ProjectsComponent {
     private router = inject(Router);
     projects: ProjectsInterface[] = [];
 
-    constructor(private database: DatabaseService
+    constructor(
+        private database: DatabaseService,
+        private workflow: WorkflowService
     ) {}  
   
     ngOnInit() {
@@ -29,6 +32,7 @@ export class ProjectsComponent {
     }
   
     loadTreeList(tools_projects_pkey: number) {
+        this.workflow.setConnectorData('tools_projects', tools_projects_pkey)
         this.router.navigate(['main', {outlets: {left_split_object_tree: ['app-tabs-treelists-component', tools_projects_pkey]}}]);
     }
 

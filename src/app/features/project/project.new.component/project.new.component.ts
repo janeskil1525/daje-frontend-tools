@@ -18,7 +18,7 @@ export class ProjectNewComponent {
     payload: ProjectNewTInterface = {name:"", state:""}
 
     constructor( 
-        private workflowservice: WorkflowService
+        private workflow: WorkflowService
     ) {}  
     
     project: string = '';
@@ -28,9 +28,9 @@ export class ProjectNewComponent {
         this.visible = true;
     }
 
-    saveProject() {    
-
-        this.workflowservice.callWorkflow('tools', 'save_new_project', this.payload)
+    saveProject() {
+        this.workflow.setConnectorData('tools_projects', 0)
+        this.workflow.callWorkflow('tools', 'save_new_project', this.payload)
     
         this.visible = false;
     }

@@ -27,33 +27,28 @@ export class ObjectTreelistComponent{
     private activatedRoute = inject(ActivatedRoute);
     private router = inject(Router);
 
-   constructor(
+    constructor(
     private database: DatabaseService,
-  ) {
+    ) {
        this.activatedRoute.params.subscribe((params) => {
            this.database.load_record('Treelist', params['tools_projects_pkey']).subscribe((response: ObjectTreeListInterface[]) => {
                this.nodes = response;
+               if (!this.nodes || this.nodes.length === 0) {
+                   this.addObject(0, 0)
+               }
            });
        });
-   };
-
-    ngOnInit() {
-        /*let tools_projects_pkey = this.tools_projects_pkey();
-        this.database.load_record('Treelist', this.tools_projects_pkey()).subscribe((response: ObjectTreeListInterface[]) => {
-            this.nodes = response;
-        });*/
-
-    }
+    };
 
   nodeSelect(event:any) {
     let type = this.getType(event.node);
     let data = event.node.data;
     if ( type.indexOf("tools_objects") > -1 ) {
-      /*this.items = [
+      this.items = [
           {label:'Table', icon: PrimeIcons.PLUS, command: (event) => this.addObject(this.selectedNode, 1)}, 
           {label:'Index', icon: PrimeIcons.PLUS, command: (event) => this.addObject(this.selectedNode, 2)}, 
           {label:'SQL', icon: PrimeIcons.PLUS, command: (event) => this.addObject(this.selectedNode, 3)}
-        ];*/
+        ];
     }
     if (type === "tools_version") {
 
@@ -94,18 +89,20 @@ export class ObjectTreelistComponent{
       this.tableObjecteGUI.sendClickEvent(0, true, node);
     }
   }
-
+*/
   addObject(node: any, object_type:number) {
-    this.versionsGUI.sendClickEvent(0, false);
-    this.tableObjecteGUI.sendClickEvent(0, false);
-    this.objecteGUI.sendClickEvent(0,true, node, object_type);
-  }
 
-  onHide() {
-    //this.selectedNode = this.selectedNode;
-    this.selectedId = '';
+      this.router.navigate(
+          ['main',
+              {
+                  outlets: {
+                      middle_split:
+                          ['object', 0]
+                  }
+              }
+          ]
+      );
   }
-  */
 
   getType(node: any) {
     let type = node.id;

@@ -8,12 +8,10 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { SelectModule } from 'primeng/select';
 import { TableObjectDatatypeInterface } from './table-object-datatype.interface';
-import { ResponseService } from '../../../core/response/response.service';
 import { WorkflowService } from '../../../core/workflow/workflow.service';
 import { DatabaseService } from '../../../core/database/database.service';
 import {ActivatedRoute} from "@angular/router";
-import {ObjectTypeInterface} from "../object.component/object.type.interface";
-import {ObjectInterface} from "../object.component/object.interface";
+import {TreelistLoadService} from "../../../core/treelist/treelist.load.service";
 
 @Component({
   selector: 'p-table-object-component',
@@ -42,8 +40,9 @@ export class TableObjectComponent {
     private tools_objects_pkey: number = 0;
 
   constructor(
-    private workflowservice: WorkflowService,
+    private workflow: WorkflowService,
     private database: DatabaseService,
+    private load_tree_list: TreelistLoadService,
   ){
       this.database.load_all_records('TableObjectDatatypes').subscribe((response: TableObjectDatatypeInterface[]) => {
           this.datatypes = response
@@ -75,9 +74,10 @@ export class TableObjectComponent {
           this.payload.length = 0;
       }
       this.payload.tools_objects_tables_datatypes_fkey = tools_objects_tables_datatypes_pkey;
-      this.workflowservice.callWorkflow(
+      this.workflow.callWorkflow(
         'tools', 'save_object_table', this.payload
       );
+      this.load_tree_list.sendClickEvent();
   }
 
     setupGUI(tools_objects_tables_datatypes_pkey: number) {

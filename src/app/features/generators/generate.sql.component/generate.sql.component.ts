@@ -8,6 +8,7 @@ import {ActivatedRoute} from "@angular/router";
 import {DatabaseService} from "../../../core/database/database.service";
 import {VersionsInterface} from "../../versions/versions.component/versions.interface";
 import {Divider} from "primeng/divider";
+import {Checkbox} from "primeng/checkbox";
 
 
 @Component({
@@ -16,7 +17,8 @@ import {Divider} from "primeng/divider";
         FormsModule,
         ButtonModule,
         CardModule,
-        Divider
+        Divider,
+        Checkbox
     ],
   templateUrl: './generate.sql.component.html',
   styleUrl: './generate.sql.component.css',
@@ -41,7 +43,7 @@ export class GenerateSqlComponent {
     generateSQL() {
 
         this.workflow.callWorkflow(
-            'tools', 'save_object_table', this.payload
+            'tools_generate_sql', 'save_object_table', this.payload
         );
     }
 

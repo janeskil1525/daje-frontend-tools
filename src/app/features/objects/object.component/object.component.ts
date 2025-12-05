@@ -11,7 +11,8 @@ import { ObjectInterface } from './object.interface';
 import { WorkflowService } from '../../../core/workflow/workflow.service';
 import { ObjectTypeInterface } from './object.type.interface';
 import { DatabaseService } from '../../../core/database/database.service';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
+import {TreelistLoadService} from "../../../core/treelist/treelist.load.service";
 
 @Component({
   selector: 'p-object-component',
@@ -33,6 +34,9 @@ import {ActivatedRoute} from "@angular/router";
 export class ObjectComponent {
     private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
     payload = {} as ObjectInterface;
+    private tools_projects_pkey: number = 0;
+    private tools_version_pkey: number = 0;
+    private router = inject(Router);
 
     objecttypes = [] as ObjectTypeInterface[];
     tools_object_types_pkey:number = 0;
@@ -40,22 +44,24 @@ export class ObjectComponent {
     constructor(
         private workflow: WorkflowService,
         private database: DatabaseService,
+        private load_tree_list: TreelistLoadService
       ) {
         this.database.load_all_records('ObjectTypes').subscribe((response: ObjectTypeInterface[]) => {
             this.objecttypes = response
         });
         this.activatedRoute.params.subscribe((params) => {
-            let tools_projects_pkey: number = parseInt(params['tools_projects_pkey']);
-            let tools_objects_pkey: number = parseInt(params['tools_objects_pkey']);
-            let tools_version_pkey: number  = parseInt(params['tools_version_pkey']);
+            this.tools_projects_pkey = parseInt(params['tools_projects_pkey']);
+            this.tools_version_pkey  = parseInt(params['tools_version_pkey']);
+            let tools_objects_pkey = parseInt(params['tools_objects_pkey']);
+
 
             this.database.load_record('Object', tools_objects_pkey).subscribe((response: ObjectInterface)=> {
                 this.payload = response
                 if(this.payload.active) this.payload.active=true;
                 this.tools_object_types_pkey = this.payload.tools_object_types_fkey
                 if(!this.payload.tools_version_fkey || this.payload.tools_version_fkey === 0) {
-                    this.payload.tools_version_fkey = tools_version_pkey;
-                    this.payload.tools_projects_fkey = tools_projects_pkey;
+                    this.payload.tools_version_fkey = this.tools_version_pkey;
+                    this.payload.tools_projects_fkey = this.tools_projects_pkey;
                 }
             });
         });
@@ -66,6 +72,7 @@ export class ObjectComponent {
         this.workflow.callWorkflow(
             'tools', 'save_object', this.payload
         );
+        this.load_tree_list.sendClickEvent();
     }
 
     cleanPayload() {

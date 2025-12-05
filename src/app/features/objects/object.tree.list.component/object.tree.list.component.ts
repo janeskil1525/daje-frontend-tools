@@ -7,6 +7,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import { BadgeModule } from 'primeng/badge';
 import { DatabaseService } from '../../../core/database/database.service';
 import {ObjectTreeListInterface} from "./object.tree.list.interface";
+import {TreelistLoadService} from "../../../core/treelist/treelist.load.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-object-treelist',
@@ -27,35 +29,44 @@ export class ObjectTreelistComponent{
     private tools_version_pkey: number = 0;
     private tools_projects_pkey: number = 0;
     private tools_objects_pkey: number = 0;
+    load_list!: Subscription;
 
     constructor(
-    private database: DatabaseService,
+        private database: DatabaseService,
+        private load_tree_list: TreelistLoadService,
     ) {
        this.activatedRoute.params.subscribe((params) => {
            this.tools_version_pkey = parseInt(params['tools_version_pkey'])
            this.tools_projects_pkey = parseInt(params['tools_projects_pkey'])
-           this.database.load_record('Treelist', this.tools_projects_pkey).subscribe((response: ObjectTreeListInterface[]) => {
-               this.nodes = response;
-               if (!this.nodes || this.nodes.length === 0) {
-                   this.addObject(0, 0)
-               } else {
-                   this.router.navigate(
-                       ['main',
-                           {
-                               outlets: {
-                                   right_split_top:
-                                       ['generators',
-                                           this.tools_projects_pkey,
-                                       ]
-                               }
-                           }
-                       ]
-                   );
-               }
-           });
+           this.loadTreeList();
        });
         this.setupContextMenu();
+        this.load_list = this.load_tree_list.getClickEvent().subscribe((tools_projects_pkey) => {
+            this.loadTreeList();
+        });
     };
+
+    loadTreeList(): void {
+        this.database.load_record('Treelist', this.tools_projects_pkey).subscribe((response: ObjectTreeListInterface[]) => {
+            this.nodes = response;
+            if (!this.nodes || this.nodes.length === 0) {
+                this.addObject(0, 0)
+            } else {
+                this.router.navigate(
+                    ['main',
+                        {
+                            outlets: {
+                                right_split_top:
+                                    ['generators',
+                                        this.tools_projects_pkey,
+                                    ]
+                            }
+                        }
+                    ]
+                );
+            }
+        });
+    }
 
   nodeSelect(event:any) {
     let type = this.getType(event.node);

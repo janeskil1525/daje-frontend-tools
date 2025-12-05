@@ -70,9 +70,11 @@ export class TableObjectComponent {
   saveTableObject(tools_objects_tables_datatypes_pkey:number) {
       this.payload.tools_version_fkey = this.tools_version_pkey;
       this.payload.tools_objects_fkey = this.tools_objects_pkey;
-      if(!this.payload.length) {
-          this.payload.length = 0;
-      }
+      if(!this.payload.length) this.payload.length = 0;
+      if(!this.payload.active) this.payload.active = false;
+      if(!this.payload.visible) this.payload.visible = false;
+      if(!this.payload.notnull) this.payload.notnull = false;
+      if(!this.payload.foreign_key) this.payload.foreign_key = false;
       this.payload.tools_objects_tables_datatypes_fkey = tools_objects_tables_datatypes_pkey;
       this.workflow.callWorkflow(
         'tools', 'save_object_table', this.payload

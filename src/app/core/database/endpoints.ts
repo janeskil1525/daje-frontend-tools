@@ -12,7 +12,7 @@ export enum EndPoints {
     TableObject = 'table/object/',
     ObjectIndex = 'objects/index/',
     ObjectSQL = 'objects/sql/',
-    ObjectView = 'object/view/',
+    ObjectView = 'objects/view/',
     Versions = 'versions/',
     ParamTreelist = 'parameters/treelist/',
     ParameterValue = 'parameters/value/',

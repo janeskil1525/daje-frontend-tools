@@ -1,15 +1,13 @@
-import { Component } from '@angular/core';
-import { ResponseService } from '../../../core/response/response.service';
+import {Component, inject} from '@angular/core';
 import { WorkflowService } from '../../../core/workflow/workflow.service';
 import { FormsModule } from '@angular/forms';
 import { FloatLabel } from 'primeng/floatlabel';
 import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
-import { Subscription } from 'rxjs';
 import { TableObjectViewInterface } from './table.object.view.interface';
 import { DatabaseService } from '../../../core/database/database.service';
-import { TableObjectViewGuiService } from './table.object.view.gui.service';
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-table.object.view.component',
@@ -25,54 +23,39 @@ import { TableObjectViewGuiService } from './table.object.view.gui.service';
   standalone: true,
 })
 export class TableObjectViewComponent {
-  loadObjectGUISub!:Subscription;
-  isVisible: boolean = false;
-  payload: TableObjectViewInterface = this.initialInterface();
+  payload: TableObjectViewInterface = {} as TableObjectViewInterface;
+  private activatedRoute = inject(ActivatedRoute);
+  private tools_version_pkey: number = 0;
+  private tools_objects_pkey: number = 0;
 
   constructor(    
-    private workflowservice: WorkflowService,
-    private responseservice: ResponseService,
-    private dbservice: DatabaseService,
-    private viewGUI: TableObjectViewGuiService
-  ){}
-
-  ngOnInit() {
-    this.loadObjectGUISub = this.viewGUI.getClickEvent().subscribe((tools_object_pkey)=>{
-        this.showWin(tools_object_pkey);
+    private workflow: WorkflowService,
+    private database: DatabaseService,
+  ){
+    this.activatedRoute.params.subscribe((params) => {
+      let tools_object_view_pkey: number = parseInt(params['tools_object_view_pkey']);
+      this.tools_version_pkey = parseInt(params['tools_version_pkey']);
+      this.tools_objects_pkey = parseInt(params['tools_objects_pkey']);
+      this.database.load_record('ObjectView', tools_object_view_pkey).subscribe((response: TableObjectViewInterface)=> {
+        this.payload = response
+        if(!this.payload.tools_version_fkey || this.payload.tools_version_fkey ===0) {
+          this.payload.tools_version_fkey = this.tools_version_pkey;
+          this.payload.tools_objects_fkey = this.tools_objects_pkey;
+        }
+      });
     });
   }
 
-  showWin(tools_object_views_pkey:number) {
-    if(this.viewGUI.getVisibility()) {
-      this.isVisible = true;
-      /*this.dbservice.load_record('View',tools_object_views_pkey).subscribe((response)=> {
-        this.payload = (this.dbservice.process_response(response, this.initialInterface()) as unknown) as TableObjectViewInterface;        
-      })*/
-    } else {
-      this.isVisible = false;
-      this.payload = this.initialInterface()
-    }
 
-  }
   saveView() {
-    this.payload.tools_version_fkey = this.viewGUI.getVersionData().id.split("-")[0];;
 
-    this.workflowservice.callWorkflow(
+    this.workflow.callWorkflow(
         'tools', 'save_object_view', this.payload
     );
 
-    this.isVisible = false;
   }
 
-    initialInterface(){
-    return {
-      name:"", fields:"",conditions:"", 
-      tools_version_fkey:0, tools_object_view_pkey:0, tools_objects_fkey:0,
-      editnum:1, insby:"", insdatetime:"", modby:"", moddatetime:"", tools_projects_fkey:0
-    };
-  }
-
-  winVisible(isVisible:boolean) {
-    this.isVisible = isVisible;
+  winVisible() {
+    this.payload = {} as TableObjectViewInterface;
   }
 }

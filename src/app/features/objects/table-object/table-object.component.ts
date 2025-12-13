@@ -103,7 +103,7 @@ export class TableObjectComponent {
             }
         }
     }
-    winVisible(isVisible:boolean) {
+    winVisible() {
         this.payload = {} as TableObjectInterface;
         this.datatypes = [] as TableObjectDatatypeInterface[];
     }

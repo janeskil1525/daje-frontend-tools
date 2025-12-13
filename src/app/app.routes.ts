@@ -6,12 +6,12 @@ import {TableObjectComponent} from "./features/objects/table-object/table-object
 import {ObjectComponent} from "./features/objects/object.component/object.component";
 import {GenerateSqlComponent} from "./features/generators/generate.sql.component/generate.sql.component";
 import {TableObjectSqlComponent} from "./features/objects/table-object-sql/table.object.sql.component";
+import {TableObjectViewComponent} from "./features/objects/table-object-view/table.object.view.component";
+import {TableObjectIndexComponent} from "./features/objects/table-object-index/table.object.index.component";
 
 
 
 export const routes: Routes = [
-
-
     {
         path: 'main',
         component: MainComponent,
@@ -40,6 +40,16 @@ export const routes: Routes = [
             {
                 path:'sql/:tools_version_pkey/:tools_objects_pkey/:tools_object_sql_pkey',
                 component: TableObjectSqlComponent,
+                outlet: 'middle_split',
+            },
+            {
+                path:'view/:tools_version_pkey/:tools_objects_pkey/:tools_object_view_pkey',
+                component: TableObjectViewComponent,
+                outlet: 'middle_split',
+            },
+            {
+                path:'index/:tools_version_pkey/:tools_objects_pkey/:tools_object_view_pkey',
+                component: TableObjectIndexComponent,
                 outlet: 'middle_split',
             },
             {

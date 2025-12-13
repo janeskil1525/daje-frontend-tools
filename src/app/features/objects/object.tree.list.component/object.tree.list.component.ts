@@ -77,7 +77,7 @@ export class ObjectTreelistComponent{
     }
     if (type === "tools_version") {
 
-    } else if ( type === "tools_objects1" || type === "tools_objects2" || type === "tools_objects3") {
+    } else if ( type === "tools_objects1" || type === "tools_objects2" || type === "tools_objects3" || type === "tools_objects4") {
         this.tools_objects_pkey = data.tools_objects_pkey;
         this.router.navigate(
             ['main',
@@ -102,13 +102,58 @@ export class ObjectTreelistComponent{
                             ['tables',
                                 this.tools_version_pkey,
                                 this.tools_objects_pkey,
-                                data.tools_object_tables_pkey]
+                                data.tools_object_tables_pkey
+                            ]
                     }
                 }
             ]
         );
-    } else if ( type === 'tools_object_index') {
+    } else if ( type === "tools_object_sql" ) {
+        this.router.navigate(
+            ['main',
+                {
+                    outlets: {
+                        middle_split:
+                            ['sql',
+                                this.tools_version_pkey,
+                                this.tools_objects_pkey,
+                                data.tools_object_sql_pkey
+                            ]
+                    }
+                }
+            ]
+        );
 
+    } else if ( type === 'tools_object_index') {
+        this.router.navigate(
+            ['main',
+                {
+                    outlets: {
+                        middle_split:
+                            ['index',
+                                this.tools_version_pkey,
+                                this.tools_objects_pkey,
+                                data.tools_object_inde_pkey
+                            ]
+                    }
+                }
+            ]
+        );
+    } else if ( type === 'tools_object_view') {
+        this.router.navigate(
+            ['main',
+                {
+                    outlets: {
+                        middle_split:
+                            ['view',
+                                this.tools_version_pkey,
+                                this.tools_objects_pkey,
+                                data.tools_object_view_pkey
+                            ]
+                    }
+                }
+            ]
+        );
     }
   }
 
@@ -129,13 +174,13 @@ export class ObjectTreelistComponent{
                 }
             ]
         );
-    } else if ( type === "tools_objects3" ) {
+    } else if ( type === "tools_objects2" ) {
           this.router.navigate(
               ['main',
                   {
                       outlets: {
                           middle_split:
-                              ['sql',
+                              ['index',
                                   this.tools_version_pkey,
                                   node.data.tools_objects_pkey,
                                   0
@@ -144,7 +189,37 @@ export class ObjectTreelistComponent{
                   }
               ]
           );
-      }
+      }  else if ( type === "tools_objects3" ) {
+        this.router.navigate(
+            ['main',
+                {
+                    outlets: {
+                        middle_split:
+                            ['sql',
+                                this.tools_version_pkey,
+                                node.data.tools_objects_pkey,
+                                0
+                            ]
+                    }
+                }
+            ]
+        );
+    }else if ( type === "tools_objects4" ) {
+        this.router.navigate(
+            ['main',
+                {
+                    outlets: {
+                        middle_split:
+                            ['view',
+                                this.tools_version_pkey,
+                                node.data.tools_objects_pkey,
+                                0
+                            ]
+                    }
+                }
+            ]
+        );
+    }
   }
 
   addObject(node: any, object_type:number) {
@@ -188,6 +263,13 @@ export class ObjectTreelistComponent{
                 label:'Index',
                 icon: PrimeIcons.PLUS,
                 command: (event) => this.addObject(this.selectedNode, 2),
+                items:[
+                    {
+                        label: 'New index',
+                        icon: PrimeIcons.PLUS,
+                        command: (event) => this.addItem(this.selectedNode, 2)
+                    }
+                ]
 
             },
             {
@@ -202,7 +284,18 @@ export class ObjectTreelistComponent{
                     }
                 ]
             },
-            {label:'View', icon: PrimeIcons.PLUS, command: (event) => this.addObject(this.selectedNode, 4)}
+            {
+                label:'View',
+                icon: PrimeIcons.PLUS,
+                command: (event) => this.addObject(this.selectedNode, 4),
+                items:[
+                    {
+                        label: 'View',
+                        icon: PrimeIcons.PLUS,
+                        command: (event) => this.addItem(this.selectedNode, 4)
+                    }
+                ]
+            }
         ];
     }
 }

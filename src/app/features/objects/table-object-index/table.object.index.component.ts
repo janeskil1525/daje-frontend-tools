@@ -41,6 +41,7 @@ export class TableObjectIndexComponent {
       this.tools_objects_pkey = parseInt(params['tools_objects_pkey']);
       this.database.load_record('ObjectIndex', tools_object_index_pkey).subscribe((response: TableObjectIndexInterface)=> {
         this.payload = response
+        if(this.payload.index_unique) this.payload.index_unique = true;
         if(!this.payload.tools_version_fkey || this.payload.tools_version_fkey === 0 ) {
           this.payload.tools_version_fkey = this.tools_version_pkey;
           this.payload.tools_objects_fkey = this.tools_objects_pkey;
@@ -51,7 +52,7 @@ export class TableObjectIndexComponent {
 
 
   saveTableObjectIndex() {
-
+    if(!this.payload.index_unique) this.payload.index_unique = false;
     this.workflow.callWorkflow(
         'tools', 'save_object_index', this.payload
     );

@@ -8,11 +8,13 @@ import { ButtonModule } from 'primeng/button';
 import { TableObjectViewInterface } from './table.object.view.interface';
 import { DatabaseService } from '../../../core/database/database.service';
 import {ActivatedRoute} from "@angular/router";
+import {InputTextModule} from "primeng/inputtext";
 
 @Component({
   selector: 'app-table.object.view.component',
   imports: [
     FormsModule,
+    InputTextModule,
     CardModule,
     FloatLabel,
     CommonModule,
@@ -33,10 +35,10 @@ export class TableObjectViewComponent {
     private database: DatabaseService,
   ){
     this.activatedRoute.params.subscribe((params) => {
-      let tools_object_view_pkey: number = parseInt(params['tools_object_view_pkey']);
+      let tools_object_views_pkey: number = parseInt(params['tools_object_views_pkey']);
       this.tools_version_pkey = parseInt(params['tools_version_pkey']);
       this.tools_objects_pkey = parseInt(params['tools_objects_pkey']);
-      this.database.load_record('ObjectView', tools_object_view_pkey).subscribe((response: TableObjectViewInterface)=> {
+      this.database.load_record('ObjectView', tools_object_views_pkey).subscribe((response: TableObjectViewInterface)=> {
         this.payload = response
         if(!this.payload.tools_version_fkey || this.payload.tools_version_fkey ===0) {
           this.payload.tools_version_fkey = this.tools_version_pkey;

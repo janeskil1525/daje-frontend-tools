@@ -133,7 +133,7 @@ export class ObjectTreelistComponent{
                             ['index',
                                 this.tools_version_pkey,
                                 this.tools_objects_pkey,
-                                data.tools_object_inde_pkey
+                                data.tools_object_index_pkey
                             ]
                     }
                 }
@@ -148,7 +148,7 @@ export class ObjectTreelistComponent{
                             ['view',
                                 this.tools_version_pkey,
                                 this.tools_objects_pkey,
-                                data.tools_object_view_pkey
+                                data.tools_object_views_pkey
                             ]
                     }
                 }

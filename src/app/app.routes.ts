@@ -43,12 +43,12 @@ export const routes: Routes = [
                 outlet: 'middle_split',
             },
             {
-                path:'view/:tools_version_pkey/:tools_objects_pkey/:tools_object_view_pkey',
+                path:'view/:tools_version_pkey/:tools_objects_pkey/:tools_object_views_pkey',
                 component: TableObjectViewComponent,
                 outlet: 'middle_split',
             },
             {
-                path:'index/:tools_version_pkey/:tools_objects_pkey/:tools_object_view_pkey',
+                path:'index/:tools_version_pkey/:tools_objects_pkey/:tools_object_index_pkey',
                 component: TableObjectIndexComponent,
                 outlet: 'middle_split',
             },
